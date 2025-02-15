@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, ActivityIndicator, Image } from "react-native";
+import { View, Text, FlatList, ActivityIndicator, Image, StyleSheet } from "react-native";
 
 interface Sighting {
   id: number;
@@ -25,7 +25,7 @@ export default function ListScreen() {
   }, []);
 
   return (
-    <View>
+    <View style={styles.container}>
       <FlatList
         data={sightings}
         keyExtractor={(item) => item.id.toString()}
@@ -42,6 +42,23 @@ export default function ListScreen() {
   );
 }
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+  },
+  itemContainer: {
+    marginBottom: 15,
+    padding: 10,
+    backgroundColor: '#f9f9f9',
+    borderRadius: 5,
+  },
+  image: {
+    width: 100,
+    height: 100,
+    marginBottom: 10,
+  },
+});
 
 
 
