@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, ActivityIndicator, Image, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  ActivityIndicator,
+  Image,
+  StyleSheet,
+} from "react-native";
 
 interface Sighting {
   id: number;
@@ -16,9 +23,9 @@ export default function ListScreen() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('https://sampleapis.assimilate.be/ufo/sightings')
-      .then(response => response.json())
-      .then(data => {
+    fetch("https://sampleapis.assimilate.be/ufo/sightings")
+      .then((response) => response.json())
+      .then((data) => {
         setSightings(data);
         setLoading(false);
       });
@@ -31,7 +38,10 @@ export default function ListScreen() {
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <View>
-            <Image source={{ uri: item.picture }} style={{ width: 100, height: 100 }} />
+            <Image
+              source={{ uri: item.picture }}
+              style={{ width: 100, height: 100 }}
+            />
             <Text>{item.witnessName}</Text>
             <Text>{new Date(item.dateTime).toLocaleString()}</Text>
             <Text>{item.description}</Text>
@@ -50,7 +60,7 @@ const styles = StyleSheet.create({
   itemContainer: {
     marginBottom: 15,
     padding: 10,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: "#f9f9f9",
     borderRadius: 5,
   },
   image: {
@@ -59,7 +69,3 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
-
-
-
-
