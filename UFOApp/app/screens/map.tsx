@@ -1,71 +1,92 @@
 import React, { useEffect, useState } from "react";
-import "leaflet/dist/leaflet.css";
-import { View } from "react-native";
-// import MapView, { Marker as RNMarker } from "react-native-maps"; // for mobile
-import axios from "axios";
+import { View, ActivityIndicator, StyleSheet } from "react-native";
+import { WebView } from "react-native-webview";
 
 interface Sighting {
   id: number;
+  witnessName: string;
+  description: string;
+  dateTime: string;
+  picture: string;
   location: {
     latitude: number;
     longitude: number;
   };
-  city: string;
-  description: string;
 }
 
 export default function MapScreen() {
+
+  
   const [sightings, setSightings] = useState<Sighting[]>([]);
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    axios
-      .get("https://sampleapis.assimilate.be/ufo/sightings")
-      .then((response) => setSightings(response.data))
-      .catch((error) => console.error(error));
+    fetch("https://sampleapis.assimilate.be/ufo/sightings")
+      .then((response) => response.json())
+      .then((data: Sighting[]) => {
+        setSightings(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        setLoading(false);
+      });
+
   }, []);
 
-  // Dynamically import react-leaflet only for web
-  const { MapContainer, TileLayer, Marker, Popup } = require("react-leaflet");
-  const L = require("leaflet");
+  const htmlContent = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>Leaflet Map</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+        <style>
+          #map { height: 100vh; }
+        </style>
+      </head>
+      <body>
+        <div id="map"></div>
+        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+        <script>
+          var map = L.map('map').setView([0, 0], 2);
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+          }).addTo(map);
+          
+          const sightings = ${JSON.stringify(sightings)};
+          sightings.forEach(sighting => {
+            L.marker([sighting.location.latitude, sighting.location.longitude])
+              .addTo(map)
+              .bindPopup('<b>' + sighting.witnessName + '</b><br>' + sighting.description);
+          });
+        </script>
+      </body>
+    </html>
+  `;
 
-  // Icon
-  const iconX = L.icon({
-    iconUrl:
-      "https://raw.githubusercontent.com/similonap/public_icons/refs/heads/main/location-pin.png",
-    iconSize: [48, 48],
-    popupAnchor: [-3, 0],
-  });
+  if (loading) return <ActivityIndicator size="large" />;
+
   return (
-    <MapContainer
-      center={{ lat: 51.505, lng: -0.09 }}
-      zoom={13}
-      style={{
-        width: "100%",
-        height: "100%",
-        position: "absolute",
-        top: 0,
-        left: 0,
-      }}
-      attributionControl={false}
-    >
-      <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        // attribution='&copy; <a href="https://www.openstreretmap.org/copyright">OpenStreetMap</a> contributors'
+    <View style={styles.container}>
+      <WebView
+        originWhitelist={['*']}
+        source={{ html: htmlContent }}
+        style={styles.webview}
       />
-      {sightings.map((sighting) => (
-        <Marker
-          key={sighting.id}
-          position={[sighting.location.latitude, sighting.location.longitude]}
-          icon={iconX}
-        >
-          <Popup>
-            <View style={{ backgroundColor: "white", padding: 10, width: 100 }}>
-              <p>{sighting.city}</p>
-              <p>{sighting.description}</p>
-            </View>
-          </Popup>
-        </Marker>
-      ))}
-    </MapContainer>
+    </View>
   );
-}
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  webview: {
+    flex: 1,
+  },
+});
+
+
