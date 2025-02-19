@@ -15,6 +15,37 @@ export default function RootLayout() {
             ),
           }}
         />
+        <Tabs.Screen
+          name="screens/list"
+          options={{
+            title: "Sightings List",
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons
+                name="format-list-bulleted"
+                color={color}
+                size={size}
+              />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="screens/map"
+          options={{
+            title: "Map",
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons name="map" color={color} size={size} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="screens/report"
+          options={{
+            title: "Report",
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons name="camera" color={color} size={size} />
+            ),
+          }}
+        />
       </Tabs>
     </SightingProvider>
   );
