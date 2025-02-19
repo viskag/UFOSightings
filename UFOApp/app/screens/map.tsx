@@ -1,29 +1,18 @@
-"use dom"
+"use dom";
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "leaflet/dist/leaflet.css";
 import { Platform, View } from "react-native";
 // import MapView, { Marker as RNMarker } from "react-native-maps"; // for mobile
-import axios from "axios";
-
-interface Sighting {
-  id: number;
-  location: {
-    latitude: number;
-    longitude: number;
-  };
-  city: string;
-  description: string;
-}
+import { SightingContext } from "../context/sightingscontext";
 
 export default function MapScreen() {
-  const [sightings, setSightings] = useState<Sighting[]>([]);
+  // Get Sightings and loadSightings method from context
+  const { sightings, loadSightings } = useContext(SightingContext);
 
+  // Load sightings from AsyncStorage when the component mounts
   useEffect(() => {
-    axios
-      .get("https://sampleapis.assimilate.be/ufo/sightings")
-      .then((response) => setSightings(response.data))
-      .catch((error) => console.error(error));
+    loadSightings(); // Load locally stored sightings instead of fetching from API
   }, []);
 
   // Dynamically import react-leaflet only for web
@@ -60,7 +49,7 @@ export default function MapScreen() {
       {sightings.map((sighting) => (
         <Marker
           key={sighting.id}
-          position={[sighting.location.latitude, sighting.location.longitude]}
+          position={[sighting.location?.latitude, sighting.location?.longitude]}
           icon={iconX}
         >
           <Popup>
