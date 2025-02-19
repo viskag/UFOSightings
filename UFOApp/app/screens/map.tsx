@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "leaflet/dist/leaflet.css";
-import { View } from "react-native";
+import { Platform, View } from "react-native";
 // import MapView, { Marker as RNMarker } from "react-native-maps"; // for mobile
 import axios from "axios";
 
@@ -26,19 +26,22 @@ export default function MapScreen() {
 
   // Dynamically import react-leaflet only for web
   const { MapContainer, TileLayer, Marker, Popup } = require("react-leaflet");
-  const L = require("leaflet");
 
   // Icon
+  const L = require("leaflet");
   const iconX = L.icon({
     iconUrl:
       "https://raw.githubusercontent.com/similonap/public_icons/refs/heads/main/location-pin.png",
     iconSize: [48, 48],
     popupAnchor: [-3, 0],
   });
+
   return (
     <MapContainer
       center={{ lat: 51.505, lng: -0.09 }}
       zoom={13}
+      minZoom={5}
+      maxZoom={18}
       style={{
         width: "100%",
         height: "100%",
