@@ -1,3 +1,5 @@
+"use dom"
+
 import React, { useEffect, useState } from "react";
 import "leaflet/dist/leaflet.css";
 import { Platform, View } from "react-native";
