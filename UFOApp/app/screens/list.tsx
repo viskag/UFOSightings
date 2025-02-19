@@ -9,7 +9,7 @@ import {
   Button,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
-import SightingContext from "../context/sightingscontext";
+import SightingContext from "../../context/sightingscontext";
 
 export default function ListScreen() {
   const { sightings, loadSightings, removeSighting } =

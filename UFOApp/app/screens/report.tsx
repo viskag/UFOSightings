@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { View, Text, Button, TextInput, Image } from "react-native";
 import { useRouter } from "expo-router";
-import { SightingContext } from "../context/sightingscontext";
+import { SightingContext } from "../../context/sightingscontext";
 import * as ImagePicker from "expo-image-picker";
 
 export default function ReportScreen() {

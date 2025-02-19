@@ -3,7 +3,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import "leaflet/dist/leaflet.css";
 import { Platform, View } from "react-native";
-import SightingContext from "../context/sightingscontext";
+import SightingContext from "../../context/sightingscontext";
 import { useRouter } from "expo-router";
 
 export default function MapScreen() {
