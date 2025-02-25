@@ -1,6 +1,6 @@
 import { Tabs } from "expo-router";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { SightingProvider } from "./context/sightingscontext";
+import { SightingProvider } from "../context/sightingscontext";
 
 export default function RootLayout() {
   return (

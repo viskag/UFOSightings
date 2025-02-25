@@ -3,12 +3,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import "leaflet/dist/leaflet.css";
 import { Platform, View } from "react-native";
-// import MapView, { Marker as RNMarker } from "react-native-maps"; // for mobile
-import { SightingContext } from "../context/sightingscontext";
+import SightingContext from "../../context/sightingscontext";
+import { useRouter } from "expo-router";
 
 export default function MapScreen() {
   // Get Sightings and loadSightings method from context
-  const { sightings, loadSightings } = useContext(SightingContext);
+  const { sightings, loadSightings, setTemporaryMarker } =
+    useContext(SightingContext);
+  const router = useRouter();
 
   // Load sightings from AsyncStorage when the component mounts
   useEffect(() => {
@@ -16,7 +18,13 @@ export default function MapScreen() {
   }, []);
 
   // Dynamically import react-leaflet only for web
-  const { MapContainer, TileLayer, Marker, Popup } = require("react-leaflet");
+  const {
+    MapContainer,
+    TileLayer,
+    Marker,
+    Popup,
+    useMapEvents,
+  } = require("react-leaflet");
 
   // Icon
   const L = require("leaflet");
@@ -27,12 +35,35 @@ export default function MapScreen() {
     popupAnchor: [-3, 0],
   });
 
+  // Handle map clicks to add a permanent marker
+  const MapClickHandler = () => {
+    useMapEvents({
+      click: async (e: { latlng: { lat: number; lng: number } }) => {
+        const { lat, lng } = e.latlng;
+
+        // Refresh temporarymarker
+        setTemporaryMarker(null);
+
+        // Store location in temporaryMarker instead of immediately adding
+        setTemporaryMarker({
+          id: Date.now(),
+          city: "", // Will be updated when saving
+          description: "",
+          location: { latitude: lat, longitude: lng },
+        });
+
+        router.push("/screens/report");
+      },
+    });
+    return null;
+  };
+
   return (
     <MapContainer
       center={{ lat: 51.505, lng: -0.09 }}
       zoom={13}
       minZoom={5}
-      maxZoom={18}
+      maxZoom={100}
       style={{
         width: "100%",
         height: "100%",
@@ -46,6 +77,7 @@ export default function MapScreen() {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         // attribution='&copy; <a href="https://www.openstreretmap.org/copyright">OpenStreetMap</a> contributors'
       />
+      <MapClickHandler />
       {sightings.map((sighting) => (
         <Marker
           key={sighting.id}
@@ -53,8 +85,23 @@ export default function MapScreen() {
           icon={iconX}
         >
           <Popup>
-            <View style={{ backgroundColor: "white", padding: 10, width: 100 }}>
-              <p>{sighting.city}</p>
+            <View
+              style={{
+                backgroundColor: "white",
+                padding: 10,
+                width: 120,
+                alignItems: "center",
+              }}
+            >
+              {sighting.picture ? (
+                <img
+                  src={sighting.picture}
+                  alt="UFO Sighting"
+                  style={{ width: "100px", height: "100px", borderRadius: 5 }}
+                />
+              ) : (
+                <p>No Image</p>
+              )}
               <p>{sighting.description}</p>
             </View>
           </Popup>
