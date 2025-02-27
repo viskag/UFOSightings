@@ -1,6 +1,12 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  useLayoutEffect,
+  useCallback,
+} from "react";
 import { View, Text, Button, TextInput, Image } from "react-native";
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import { SightingContext } from "../../context/sightingscontext";
 import * as ImagePicker from "expo-image-picker";
 
@@ -19,22 +25,24 @@ export default function ReportScreen() {
   const router = useRouter();
 
   // Automatically open camera
-  useEffect(() => {
-    // Refresh fields
-    setWitnessName("");
-    setDescription("");
-    setImage(null);
+  useFocusEffect(
+    useCallback(() => {
+      // Refresh fields
+      setWitnessName("");
+      setDescription("");
+      setImage(null);
 
-    const openCamera = async () => {
-      const result = await ImagePicker.launchCameraAsync({
-        allowsEditing: true,
-      });
-      if (!result.canceled) {
-        setImage(result.assets[0].uri);
-      }
-    };
-    openCamera();
-  }, []);
+      const openCamera = async () => {
+        const result = await ImagePicker.launchCameraAsync({
+          allowsEditing: true,
+        });
+        if (!result.canceled) {
+          setImage(result.assets[0].uri);
+        }
+      };
+      openCamera();
+    }, [])
+  );
 
   // Save sighting
   const saveSighting = async () => {
