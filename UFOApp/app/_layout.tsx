@@ -1,6 +1,7 @@
 import { Tabs } from "expo-router";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { SightingProvider } from "../context/sightingscontext";
+import { StyleSheet } from "react-native";
 
 export default function RootLayout() {
   return (
@@ -9,7 +10,7 @@ export default function RootLayout() {
         <Tabs.Screen
           name="index"
           options={{
-            title: "Home",
+            title: "UFO Reporter v0.5",
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons name="home" color={color} size={size} />
             ),
@@ -50,3 +51,25 @@ export default function RootLayout() {
     </SightingProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+  },
+  header: {
+    height: 60,
+    backgroundColor: '#4CAF50',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerText: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  content: {
+    flex: 1,
+    padding: 20,
+  },
+});
