@@ -10,6 +10,7 @@ export interface Sighting {
   dateTime?: string;
   city: string;
   description?: string;
+  status: string;
   location?: {
     latitude: number;
     longitude: number;

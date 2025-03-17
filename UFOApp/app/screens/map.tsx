@@ -49,6 +49,7 @@ export default function MapScreen() {
           id: Date.now(),
           city: "", // Will be updated when saving
           description: "",
+          status: "",
           location: { latitude: lat, longitude: lng },
         });
 
@@ -103,6 +104,19 @@ export default function MapScreen() {
                 <p>No Image</p>
               )}
               <p>{sighting.description}</p>
+              <div
+                style={{
+                  backgroundColor: "#007bff", // Example button color
+                  color: "white",
+                  padding: "10px 15px",
+                  borderRadius: "5px",
+                  cursor: "pointer",
+                  marginTop: "10px",
+                }}
+                onClick={() => router.push(`/detail?id=${sighting.id}`)}
+              >
+                View Details
+              </div>
             </View>
           </Popup>
         </Marker>

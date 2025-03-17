@@ -1,4 +1,4 @@
-import { View, Text, Button, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import { StyleSheet } from "react-native";
 import { Image } from "react-native";
@@ -55,43 +55,43 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
   },
   header: {
-    fontSize: 32, 
-    fontWeight: "800", 
-    color: "#1C1C1C", 
-    marginBottom: 50, 
+    fontSize: 32,
+    fontWeight: "800",
+    color: "#1C1C1C",
+    marginBottom: 50,
   },
   buttonContainer: {
-    flexDirection: "row", 
-    width: "80%", 
-    marginBottom: 20, 
-    paddingVertical: 15, 
-    borderRadius: 15, 
-    alignItems: "center", 
-    justifyContent: "center", 
-    elevation: 5, 
+    flexDirection: "row",
+    width: "80%",
+    marginBottom: 20,
+    paddingVertical: 15,
+    borderRadius: 15,
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 5,
   },
-  
+
   viewMapButton: {
-    backgroundColor: "#4CAF50", 
-    borderColor: "#388E3C", 
+    backgroundColor: "#4CAF50",
+    borderColor: "#388E3C",
   },
   viewSightingsButton: {
-    backgroundColor: "#2196F3", 
-    borderColor: "#1976D2", 
+    backgroundColor: "#2196F3",
+    borderColor: "#1976D2",
   },
   addSightingButton: {
-    backgroundColor: "#FF9800", 
+    backgroundColor: "#FF9800",
     borderColor: "#F57C00",
   },
   buttonText: {
-    fontSize: 18, 
-    fontWeight: "600", 
-    color: "#ffffff", 
-    marginLeft: 10, 
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#ffffff",
+    marginLeft: 10,
   },
   icon: {
-    width: 24, 
-    height: 24, 
-    marginRight: 10, 
+    width: 24,
+    height: 24,
+    marginRight: 10,
   },
 });
