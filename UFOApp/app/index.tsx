@@ -1,4 +1,4 @@
-import { View, Text, Button, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import { StyleSheet } from "react-native";
 import { Image } from "react-native";
@@ -71,9 +71,10 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 32,
     fontWeight: "800",
-    color: "lightblue",
+    //color: "lightblue",
     marginBottom: 50,
-    fontFamily: "Verdana"
+    fontFamily: "Verdana",
+    color: "#1C1C1C",
   },
   buttonContainer: {
     flexDirection: "row",
@@ -85,6 +86,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     elevation: 5,
   },
+
   viewMapButton: {
     backgroundColor: "#4CAF50",
     borderColor: "#388E3C",
