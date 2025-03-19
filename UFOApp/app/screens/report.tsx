@@ -6,10 +6,12 @@ import {
   TextInput,
   Image,
   StyleSheet,
+  Platform,
 } from "react-native";
 import { useFocusEffect, useRouter } from "expo-router";
 import { SightingContext } from "../../context/sightingscontext";
 import * as ImagePicker from "expo-image-picker";
+import DateTimePicker from "@react-native-community/datetimepicker"; // Expo's DateTimePicker
 
 export default function ReportScreen() {
   const {
@@ -22,6 +24,8 @@ export default function ReportScreen() {
   const [witnessName, setWitnessName] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState<string | null>(null);
+  const [isDatePickerVisible, setDatePickerVisible] = useState(false); // State to control date picker visibility
+  const [selectedDate, setSelectedDate] = useState(new Date()); // State for the selected date
   const router = useRouter();
 
   // Automatically open camera
@@ -39,6 +43,21 @@ export default function ReportScreen() {
     }, [])
   );
 
+  // Show date picker
+  const showDatePicker = () => setDatePickerVisible(true);
+
+  // Hide date picker
+  const hideDatePicker = () => setDatePickerVisible(false);
+
+  // Handle date selection for native platforms
+  const handleConfirm = (event: any, selectedDate: any) => {
+    if (event.type === "set") {
+      const currentDate = selectedDate || new Date();
+      setSelectedDate(currentDate); // Update selected date
+      hideDatePicker(); // Close the date picker after selection
+    }
+  };
+
   // Save sighting
   const saveSighting = async () => {
     if (!temporaryMarker || !temporaryMarker.location) {
@@ -52,7 +71,7 @@ export default function ReportScreen() {
       witnessName: witnessName || "Anonymous",
       description: description || "No description provided",
       picture: image,
-      dateTime: new Date().toISOString(),
+      dateTime: selectedDate.toISOString(),
     });
 
     setTemporaryMarker(null); // Clear the temporary marker
@@ -60,29 +79,12 @@ export default function ReportScreen() {
     await loadSightings();
     router.push("/screens/list");
 
-    console.log(
-      "After reset - witnessName:",
-      witnessName,
-      "description:",
-      description,
-      "image:",
-      image
-    );
-
     // Reset the input fields
     setWitnessName("");
     setDescription("");
     setImage(null);
-
-    console.log(
-      "After reset - witnessName:",
-      witnessName,
-      "description:",
-      description,
-      "image:",
-      image
-    );
   };
+
   // Cancel sighting
   const cancelSighting = () => {
     if (temporaryMarker) {
@@ -90,6 +92,7 @@ export default function ReportScreen() {
     }
     router.push("/screens/map");
   };
+
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Report Sighting</Text>
@@ -114,6 +117,37 @@ export default function ReportScreen() {
         numberOfLines={4}
       />
 
+      <Text style={styles.label}>Date of Sighting</Text>
+      <TouchableOpacity onPress={showDatePicker} style={styles.dateButton}>
+        <Text style={styles.dateText}>
+          {selectedDate ? selectedDate.toDateString() : "Select Date"}
+        </Text>
+      </TouchableOpacity>
+
+      {/* Native DateTimePicker for iOS/Android */}
+      {isDatePickerVisible && Platform.OS !== "web" && (
+        <DateTimePicker
+          value={selectedDate}
+          mode="date"
+          display={Platform.OS === "ios" ? "spinner" : "default"}
+          onChange={handleConfirm}
+        />
+      )}
+
+      {/* Custom HTML Date Picker for Web */}
+      {Platform.OS === "web" && isDatePickerVisible && (
+        <input
+          type="date"
+          value={selectedDate.toISOString().split("T")[0]} // Format the date as yyyy-mm-dd
+          onChange={(e) => {
+            const newDate = new Date(e.target.value);
+            setSelectedDate(newDate);
+            hideDatePicker(); // Close date picker after selecting a date
+          }}
+          style={styles.datePickerWeb}
+        />
+      )}
+
       <TouchableOpacity
         style={[styles.buttonContainer, styles.saveButton]}
         onPress={saveSighting}
@@ -130,6 +164,7 @@ export default function ReportScreen() {
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -197,5 +232,27 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
     color: "#ffffff",
+  },
+  dateButton: {
+    height: 40,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    borderRadius: 5,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 12,
+  },
+  dateText: {
+    fontSize: 16,
+    color: "#000",
+  },
+  datePickerWeb: {
+    width: "100%",
+    padding: 10,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    borderRadius: 5,
+    fontSize: 16,
+    color: "#333",
   },
 });

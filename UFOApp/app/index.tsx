@@ -21,7 +21,7 @@ export default function HomeScreen() {
         {}
         <TouchableOpacity
           style={[styles.buttonContainer, styles.viewMapButton]}
-          onPress={() => router.push("./screens/map")}
+          onPress={() => router.push("/screens/map")}
         >
           <Image
             source={require("../assets/icons/iconMap.png")}
@@ -32,7 +32,7 @@ export default function HomeScreen() {
 
         <TouchableOpacity
           style={[styles.buttonContainer, styles.viewSightingsButton]}
-          onPress={() => router.push("./screens/list")}
+          onPress={() => router.push("/screens/list")}
         >
           <Image
             source={require("../assets/icons/iconList.png")}
@@ -43,7 +43,7 @@ export default function HomeScreen() {
 
         <TouchableOpacity
           style={[styles.buttonContainer, styles.addSightingButton]}
-          onPress={() => router.push("./screens/report")}
+          onPress={() => router.push("/screens/report")}
         >
           <Image
             source={require("../assets/icons/iconAdd.png")}
@@ -71,10 +71,10 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 32,
     fontWeight: "800",
-    //color: "lightblue",
+    color: "lightblue",
     marginBottom: 50,
     fontFamily: "Verdana",
-    color: "#1C1C1C",
+    //color: "#1C1C1C",
   },
   buttonContainer: {
     flexDirection: "row",
